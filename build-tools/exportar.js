@@ -213,22 +213,36 @@ function writeReleaseSummary(version, target, extraLines = []) {
 }
 function downloadToFile(url, destination) {
   fs.mkdirSync(path.dirname(destination), { recursive: true });
+  const tempDestination = `${destination}.part`;
+  fs.rmSync(tempDestination, { force: true });
   return new Promise((resolve, reject) => {
+    const failDownload = error => {
+      fs.rmSync(tempDestination, { force: true });
+      fs.rmSync(destination, { force: true });
+      reject(error);
+    };
     const request = (currentUrl, redirects = 0) => {
-      const file = fs.createWriteStream(destination);
-      https.get(currentUrl, response => {
+      const req = https.get(currentUrl, response => {
         if ([301, 302, 303, 307, 308].includes(response.statusCode) && response.headers.location) {
-          file.close(() => fs.rmSync(destination, { force: true }));
-          if (redirects > 8) return reject(new Error(`Demasiadas redirecciones al descargar ${url}`));
+          response.resume();
+          if (redirects > 8) return failDownload(new Error(`Demasiadas redirecciones al descargar ${url}`));
           return request(new URL(response.headers.location, currentUrl).toString(), redirects + 1);
         }
         if (response.statusCode !== 200) {
-          file.close(() => fs.rmSync(destination, { force: true }));
-          return reject(new Error(`Descarga fallida ${response.statusCode}: ${currentUrl}`));
+          response.resume();
+          return failDownload(new Error(`Descarga fallida ${response.statusCode}: ${currentUrl}`));
         }
+        const file = fs.createWriteStream(tempDestination);
         response.pipe(file);
-        file.on('finish', () => file.close(resolve));
-      }).on('error', error => { file.close(() => fs.rmSync(destination, { force: true })); reject(error); });
+        file.on('finish', () => {
+          file.close(() => {
+            fs.renameSync(tempDestination, destination);
+            resolve();
+          });
+        });
+        file.on('error', failDownload);
+      });
+      req.on('error', failDownload);
     };
     request(url);
   });

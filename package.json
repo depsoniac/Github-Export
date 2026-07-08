@@ -7,8 +7,8 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron . --dev",
-    "dist:win": "electron-builder --win portable",
-    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win portable --publish never",
+    "dist:mac": "electron-builder --mac --publish never",
     "export": "node build-tools/exportar.js",
     "export:win": "node build-tools/exportar.js --target win",
     "export:mac": "node build-tools/exportar.js --target mac",
