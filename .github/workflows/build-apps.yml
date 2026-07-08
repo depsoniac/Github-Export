@@ -1,0 +1,82 @@
+name: Build ClipDock (Windows + macOS)
+
+# Una sola base de código, dos exports.
+# Se lanza a mano desde Actions > Run workflow.
+# Genera artifacts para subir manualmente a Releases:
+#   - ClipDock_Setup_<version>.exe
+#   - ClipDock_Runtime_python-3.11.9.zip
+#   - ClipDock_Mac_<version>_arm64.dmg
+#   - ClipDock_Mac_<version>_x64.dmg
+#   - ClipDock_Runtime_python-3.11.9-macos-arm64.zip
+#   - ClipDock_Runtime_python-3.11.9-macos-x64.zip
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    name: Windows + runtime Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Exportar Windows desde script unico
+        run: node build-tools/exportar.js --target win --no-version-prompt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClipDock-Windows
+          path: |
+            release-dist/ClipDock_Setup_*.exe
+            release-dist/ClipDock_Runtime_python-*.zip
+            release-dist/ClipDock_release_checklist_*_windows.txt
+          if-no-files-found: error
+
+  build-mac-app:
+    name: macOS app DMG
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Exportar DMG desde script unico
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: node build-tools/exportar.js --target mac --no-version-prompt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClipDock-macOS-DMG
+          path: |
+            release-dist/ClipDock_Mac_*.dmg
+            release-dist/ClipDock_release_checklist_*_macos.txt
+          if-no-files-found: error
+
+  build-mac-runtime:
+    name: Runtime macOS ${{ matrix.arch }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: arm64
+            runner: macos-14
+          - arch: x64
+            runner: macos-15-intel
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Exportar runtime macOS desde script unico
+        env:
+          CLIPDOCK_MAC_RUNTIME_ARCH: ${{ matrix.arch }}
+        run: node build-tools/exportar.js --target mac-runtime --no-version-prompt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClipDock-Runtime-macOS-${{ matrix.arch }}
+          path: |
+            release-dist/ClipDock_Runtime_python-*-macos-${{ matrix.arch }}.zip
+            release-dist/ClipDock_release_checklist_*_mac-runtime-${{ matrix.arch }}.txt
+          if-no-files-found: error
