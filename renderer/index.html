@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClipDock</title>
+  <link rel="stylesheet" href="styles.css?v=0.5.53">
+  <link rel="stylesheet" href="settings.css?v=0.5.53">
+  <link rel="stylesheet" href="studio.css?v=0.5.53">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="titlebar">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span></div>
+      <strong>ClipDock</strong>
+      <button class="titlebar-share" id="titlebar-share" type="button" title="Copiar link de la página" aria-label="Copiar link de la página para compartir ClipDock">
+        <span class="titlebar-share-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M15.2 6.8a3 3 0 1 0 0-1.6l-6.2 3.2a3 3 0 1 0 0 7.2l6.2 3.2a3 3 0 1 0 .5-1.5L9.5 14a3.1 3.1 0 0 0 0-4l6.2-3.2Z"/></svg>
+        </span>
+        <span class="titlebar-share-text">Compartir</span>
+      </button>
+      <div class="titlebar-drag"></div>
+    </header>
+
+    <aside class="sidebar">
+      <div class="sidebar-control-row"><button class="sidebar-compact-toggle" id="sidebar-compact-toggle" title="Contraer barra lateral" aria-label="Contraer barra lateral"><span>‹</span></button></div>
+      <nav>
+        <p class="nav-label">ESPACIO DE TRABAJO</p>
+        <button class="nav-item active" data-view="download" title="Descargar"><span class="icon icon-download" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5v10"/><path d="m7.5 9.5 4.5 4.5 4.5-4.5"/><path class="soft" d="M4.5 16.5v1.5a2.5 2.5 0 0 0 2.5 2.5h10a2.5 2.5 0 0 0 2.5-2.5v-1.5"/></svg></span><span class="nav-text">Descargar</span></button>
+        <button class="nav-item" data-view="enhance" title="Mejorar con IA"><span class="icon icon-image-ai" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5.5" width="14.5" height="12.5" rx="3"/><path d="m6 14.6 3-3.4 2.7 2.9 1.8-2 2.5 2.5"/><circle class="soft" cx="8.7" cy="9.2" r="1.2"/><path class="spark" d="M20.3 2.6c.4 1.95 1.35 2.9 3.3 3.3-1.95.42-2.9 1.37-3.3 3.32-.42-1.95-1.37-2.9-3.32-3.32 1.95-.4 2.9-1.35 3.32-3.3Z"/></svg></span><span class="nav-text">Mejorar con IA</span></button>
+        <button class="nav-item" data-view="convert" title="Convertir y recortar"><span class="icon icon-video-cut" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13.5" height="12" rx="3"/><path d="M8.3 9.8v4.4l3.8-2.2-3.8-2.2Z"/><path class="soft" d="m18.8 12 3.2 3.4M18.8 12 22 8.6"/><circle class="spark" cx="18.6" cy="12" r="1.5"/></svg></span><span class="nav-text">Convertir y recortar</span></button>
+        <button class="nav-item" data-view="assets" title="SFX/VFX"><span class="icon icon-fx" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 10.2v3.6"/><path d="M8 7.4v9.2"/><path d="M12 4.6v14.8"/><path d="M16 7.4v9.2"/><path class="soft" d="M20 10.2v3.6"/><path class="spark" d="M20.6 3c.3 1.5 1 2.2 2.5 2.5-1.5.32-2.2 1.02-2.5 2.55-.32-1.53-1.02-2.23-2.55-2.55 1.53-.3 2.23-1 2.55-2.5Z"/></svg></span><span class="nav-text">SFX/VFX</span></button>
+        <button class="nav-item" data-view="plugins" title="Complementos"><span class="icon icon-store" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4.5h14l1.6 4.7H3.4L5 4.5Z"/><path class="soft" d="M4.6 9.2v9a1.8 1.8 0 0 0 1.8 1.8h11.2a1.8 1.8 0 0 0 1.8-1.8v-9"/><path d="M9.6 20v-5.2h4.8V20"/></svg></span><span class="nav-text">Complementos</span></button>
+      </nav>
+      <div class="sidebar-bottom clipdock-bottom">
+        <div class="sidebar-plugin-welcome hidden" id="sidebar-plugin-welcome" role="button" tabindex="0" aria-label="Ir a Complementos para descargar la extensión oficial">
+          <button class="sidebar-plugin-welcome-close" id="sidebar-plugin-welcome-close" type="button" aria-label="Cerrar aviso de extensión oficial">×</button>
+          <span class="sidebar-plugin-welcome-badge">1</span>
+          <div class="sidebar-plugin-welcome-copy">
+            <strong>Extensión oficial disponible</strong>
+            <small>Ve a Complementos para descargar ClipDock Remote.</small>
+          </div>
+          <b>Ir a Complementos →</b>
+        </div>
+        <button class="version-mini" id="sidebar-version" data-view="settings" data-settings-shortcut="updates" title="Ver actualizaciones">
+          <span>Versión</span>
+          <strong id="sidebar-version-number">v0.5.48</strong>
+        </button>
+        <div class="sidebar-dock-actions" aria-label="Accesos rápidos">
+          <button class="dock-action nav-item settings-button" data-view="settings" title="Ajustes" aria-label="Ajustes" data-tip="Ajustes"><span class="dock-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z"/><path d="M19.4 13.5c.06-.5.06-1 0-1.5l2-1.5-2-3.4-2.4 1a8.1 8.1 0 0 0-1.3-.8L15.4 4h-6.8l-.3 3.3c-.45.22-.88.48-1.3.8l-2.4-1-2 3.4 2 1.5a8.6 8.6 0 0 0 0 1.5l-2 1.5 2 3.4 2.4-1c.4.3.83.58 1.3.8l.3 3.3h6.8l.3-3.3c.46-.22.9-.49 1.3-.8l2.4 1 2-3.4-2-1.5Z"/></svg></span></button>
+          <button class="dock-action" id="change-folder" title="Salida" aria-label="Carpeta de salida" data-tip="Carpeta de salida"><span class="dock-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5h6l2 2h10v9.2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7.5Z"/><path d="M3 7.5V5.8a2 2 0 0 1 2-2h4.4l2 2H19a2 2 0 0 1 2 2v1.7"/></svg></span><small id="output-folder">Sin seleccionar</small></button>
+          <button class="dock-action nav-item sidebar-queue" id="sidebar-activity-button" data-view="queue" title="Cola de trabajos" aria-label="Cola de trabajos" data-tip="Cola de trabajos"><span class="queue-nav-ring" id="queue-nav-ring"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg><i></i></span><b id="queue-count">0</b></button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <section class="view active" id="view-download">
+        <div class="mode-switch" id="download-mode-switch" role="tablist" aria-label="Modo de descarga">
+          <button class="mode-option active" data-download-mode="normal" role="tab" aria-selected="true">Modo normal</button>
+          <button class="mode-option" data-download-mode="ultra" role="tab" aria-selected="false">Modo ultra fácil</button>
+        </div>
+        <div class="page-heading">
+          <div><p class="eyebrow">CAPTURA</p><h1>Trae cualquier video.<br><em>Déjalo listo para editar.</em></h1></div>
+          <div class="heading-stat"><strong>+1.000</strong><span>sitios compatibles</span></div>
+        </div>
+        <div class="url-composer">
+          <div class="url-main"><span class="link-icon">↗</span><input id="url-input" type="url" placeholder="Pega aquí un enlace de YouTube, Vimeo, Twitch…"><button id="paste-url">Pegar</button></div>
+          <button class="primary-button" id="analyze-button"><span>Analizar enlace</span><b>→</b></button>
+        </div>
+        <div class="auth-help hidden" id="auth-help"><div><span>!</span><div><strong>YouTube pidió confirmar que eres tú</strong><p>Importa un archivo cookies.txt válido para analizar este enlace.</p></div></div><div><button class="secondary-button" id="retry-analysis">Reintentar</button><button class="primary-button" id="open-cookie-settings"><span>Configurar acceso</span><b>→</b></button></div></div>
+        <div class="analysis-card technical-card hidden" id="analysis-card">
+          <div class="media-preview" id="media-preview"><div class="play-glyph">▶</div></div>
+          <div class="media-details"><span class="source-chip" id="media-source">VIDEO</span><h2 id="media-title">Analizando…</h2><p id="media-meta"></p><div class="technical-grid" id="technical-grid"></div></div>
+          <div class="asset-capture-actions"><button class="asset-chip-button" id="capture-sfx">SFX</button><button class="asset-chip-button" id="capture-vfx">VFX</button><small>Recorta y guarda en tu biblioteca</small></div>
+        </div>
+        <div class="drop-zone" id="download-empty">
+          <div class="orbit-icon"><span>↓</span></div><h3>Pega un enlace para comenzar</h3><p>Analizaremos formatos, audio, subtítulos y miniaturas antes de descargar.</p>
+          <div class="support-row"><span>YOUTUBE</span><span>VIMEO</span><span>TWITCH</span><span>+ WEB</span></div>
+        </div>
+        <section class="download-session hidden" id="download-session">
+          <div class="session-head"><div><p class="eyebrow">SESIÓN ACTUAL</p><h2><span id="session-count">0</span> elementos preparados</h2></div><div><button class="secondary-button btn-with-icon" id="universal-settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h8.5"/><circle cx="16" cy="8" r="2.4"/><path d="M19.9 8H20"/><path d="M4 16h3.5"/><circle cx="11" cy="16" r="2.4"/><path d="M14.5 16H20"/></svg><span>Ajuste universal</span></button><button class="primary-button compact-button" id="download-all"><span>Descargar todo</span><b>↓</b></button></div></div>
+          <div class="session-list" id="session-list"></div>
+        </section>
+        <section class="ultra-panel hidden" id="ultra-panel">
+          <div class="ultra-media">
+            <div class="ultra-thumb" id="ultra-thumb"><span>▶</span></div>
+            <div class="ultra-media-info">
+              <p class="eyebrow">LISTO PARA DESCARGAR</p>
+              <h2 id="ultra-title">Analizando…</h2>
+              <p id="ultra-meta"></p>
+            </div>
+          </div>
+          <div class="ultra-block">
+            <p class="ultra-label">¿Qué quieres?</p>
+            <div class="ultra-choices" id="ultra-choices">
+              <button class="ultra-choice active" data-ultra-choice="video-audio">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="14" height="12" rx="2.5"/><path d="m17 10 4-2.5v9L17 14"/></svg>
+                <strong>Video MP4</strong><small>Imagen + sonido</small>
+              </button>
+              <button class="ultra-choice" data-ultra-choice="audio">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg>
+                <strong>Solo audio MP3</strong><small>Solo el sonido</small>
+              </button>
+              <button class="ultra-choice" data-ultra-choice="video">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="14" height="12" rx="2.5"/><path d="m17 10 4-2.5v9L17 14"/><path d="M6 9h8M6 12h5"/></svg>
+                <strong>Solo video MP4</strong><small>Sin sonido</small>
+              </button>
+            </div>
+          </div>
+          <div class="ultra-block ultra-trim-block">
+            <div class="ultra-trim-head"><p class="ultra-label">Recortar <small>(opcional)</small></p><button type="button" id="ultra-trim-reset">Todo el video</button></div>
+            <div class="ultra-trim-slider"><div></div><i id="ultra-trim-selection"></i><input id="ultra-trim-start-range" type="range" min="0" max="100" value="0"><input id="ultra-trim-end-range" type="range" min="0" max="100" value="100"></div>
+            <div class="two-fields ultra-trim-fields"><label>Desde<input id="ultra-start" value="00:00:00"></label><label>Hasta<input id="ultra-end" value="00:00:00"></label></div>
+          </div>
+          <button class="primary-button ultra-download" id="ultra-download"><span>Descargar en máxima calidad</span><b>↓</b></button>
+        </section>
+      </section>
+
+      <section class="view" id="view-enhance">
+        <div class="page-heading compact"><div><p class="eyebrow">LABORATORIO IA</p><h1>Mejora imágenes.<br><em>Todo en una sola ventana.</em></h1></div></div>
+        <div class="image-studio unified" id="image-workbench">
+          <div class="image-preview-panel">
+            <div class="image-preview-top"><div><span>VISTA PREVIA</span><strong id="selected-file">Ningún archivo</strong></div><div class="preview-toolbar"><button class="secondary-button" id="pick-image-button">Elegir archivo</button><button class="secondary-button purple-button" id="paste-image">▣ Pegar imagen</button></div></div>
+            <div class="image-preview-stage" id="pick-image"><img id="image-preview" alt="Vista previa"><div id="image-preview-empty"><span>＋</span><strong>Elige o pega una imagen</strong><small>Ctrl + V también agrega imágenes a la sesión</small></div></div>
+          </div>
+          <aside class="image-session-sidepanel">
+            <section class="image-session-panel" id="image-session-panel">
+              <div class="image-session-head"><div><p class="eyebrow">SESIÓN ACTUAL</p><h2><span id="image-session-count">0</span> imágenes listas</h2><small>Selecciona una para verla, o procesa una por una o toda la sesión.</small></div><div class="image-session-toolbar"><button class="session-icon-button" id="image-universal-settings" title="Ajuste universal" aria-label="Ajuste universal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"/><circle cx="9" cy="7" r="2"/><path d="M4 17h16"/><circle cx="15" cy="17" r="2"/></svg></button><button class="session-icon-button" id="image-folder-settings" title="Exportar en carpeta" aria-label="Exportar en carpeta"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5h5l1.7 2H20a1 1 0 0 1 1 1v7.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8.5a2 2 0 0 1 2-2Z"/><path d="M3.5 10.5h17"/></svg></button><button class="session-icon-button primary" id="process-all-images" title="Procesar todo" aria-label="Procesar todo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></button></div></div>
+              <div class="image-session-list" id="image-session-list"><div class="empty-mini">Pega o elige imágenes para armar la sesión.</div></div>
+            </section>
+          </aside>
+          <div class="image-modal-backdrop hidden" id="image-universal-backdrop"></div>
+          <div class="image-controls-panel unified-controls image-universal-modal-panel" id="image-universal-panel">
+            <div class="studio-tool-heading"><div><p class="eyebrow" id="image-panel-eyebrow">IMAGEN SELECCIONADA</p><h2 id="image-tool-title">Formato, tamaño e IA</h2><small id="image-tool-description">Configura la imagen activa de la lista. El ajuste universal vive arriba en la sesión.</small></div><div class="image-modal-actions"><button class="primary-button image-process-button" id="process-image"><span>Procesar imagen seleccionada</span><b>→</b></button><button class="image-modal-close" id="close-image-universal" aria-label="Cerrar">×</button></div></div>
+            <div class="unified-image-options">
+              <section class="image-options active option-group" id="image-options-output"><div class="option-title"><span>01</span><strong>Salida</strong></div><label>Formato de salida<select id="image-format"><option value="png">PNG</option><option value="jpg">JPEG</option><option value="webp">WebP</option><option value="avif">AVIF</option><option value="tiff">TIFF</option><option value="pdf">PDF</option></select></label><label>Calidad <output id="image-quality-value">90</output><input id="image-quality" type="range" min="20" max="100" value="90"></label><label class="toggle-line"><input id="preserve-metadata" type="checkbox"><span></span>Conservar metadatos compatibles</label></section>
+              <section class="image-options active option-group" id="image-options-size"><div class="option-title"><span>02</span><strong>Tamaño</strong><small>Apagado = conserva el tamaño original.</small></div><label class="toggle-line"><input id="resize-enabled" type="checkbox"><span></span>Tamaño de salida manual</label><div class="two-fields resize-fields"><label>Ancho<input id="image-width" type="number" min="1" placeholder="Original"></label><label>Alto<input id="image-height" type="number" min="1" placeholder="Original"></label></div><label class="toggle-line resize-fields"><input id="maintain-aspect" type="checkbox" checked><span></span>Mantener proporción</label><label class="resize-fields">Interpolación<select id="image-interpolation"><option value="Lanczos">Lanczos — alta calidad</option><option value="Bicubic">Bicúbica</option><option value="Nearest">Vecino más cercano</option></select></label></section>
+              <section class="image-options active option-group" id="image-options-ai"><div class="option-title"><span>03</span><strong>IA</strong></div><label class="toggle-line"><input id="upscale-enabled" type="checkbox" checked><span></span>Escalar con IA</label><label class="upscale-fields">Motor de escala<select id="upscale-engine"><option value="Real-ESRGAN">Real-ESRGAN — recomendado</option><option value="Waifu2x">Waifu2x — ilustración</option><option value="RealSR">RealSR — fotografía</option><option value="SRMD">SRMD — general</option></select></label><label class="upscale-fields">Cantidad de escala<select id="image-scale"><option value="2">2×</option><option value="4">4×</option></select></label></section>
+              <section class="image-options active option-group" id="image-options-canvas"><div class="option-title"><span>04</span><strong>Fondo</strong></div><label class="toggle-line"><input id="remove-background" type="checkbox"><span></span>Quitar fondo</label><label class="rembg-fields">Modelo de fondo<select id="rembg-model"><option value="u2netp">U2-Net ligero</option><option value="isnet-general-use">IS-Net general</option><option value="u2net">U2-Net preciso</option></select></label><label class="toggle-line"><input id="canvas-enabled" type="checkbox"><span></span>Añadir lienzo</label><div class="two-fields canvas-fields"><label>Ancho lienzo<input id="canvas-width" type="number" placeholder="1920"></label><label>Alto lienzo<input id="canvas-height" type="number" placeholder="1080"></label></div><label class="toggle-line"><input id="background-enabled" type="checkbox"><span></span>Aplicar color de fondo</label><label class="background-fields">Color<input id="background-color" type="color" value="#111111"></label><label class="canvas-fields">Posición<select id="canvas-position"><option value="center">Centro</option><option value="top">Arriba</option><option value="bottom">Abajo</option><option value="left">Izquierda</option><option value="right">Derecha</option></select></label></section>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-convert">
+        <div class="page-heading compact"><div><p class="eyebrow">TALLER</p><h1>Convierte, recorta<br><em>y prepara entregables.</em></h1></div></div>
+        <div class="video-studio convert-video-studio unified" id="video-workbench">
+          <div class="video-preview-panel"><div class="video-preview-top"><span>VISTA PREVIA</span><button class="secondary-button hidden" id="pick-ai-video-button">Reemplazar</button></div><div class="video-preview-stage" id="pick-ai-video"><video id="video-preview" controls></video><div id="video-preview-empty"><button class="video-upload-empty" id="upload-ai-video-button"><b>＋</b>Subir video</button></div></div><p class="preview-filename hidden" id="selected-video-file">Ningún archivo</p></div>
+          <aside class="video-session-sidepanel"><section class="video-session-panel"><div class="video-session-head"><div><p class="eyebrow">SESIÓN ACTUAL</p><h2><span id="convert-session-count">0</span> videos listos</h2><small>Selecciona uno para previsualizarlo; los ajustes inferiores son del video seleccionado.</small></div><div class="convert-session-toolbar"><button class="session-icon-button" id="convert-universal-settings" title="Ajuste universal" aria-label="Ajuste universal"><svg viewBox="0 0 24 24"><path d="M4 7h10"/><path d="M18 7h2"/><circle cx="16" cy="7" r="2"/><path d="M4 17h2"/><path d="M10 17h10"/><circle cx="8" cy="17" r="2"/></svg></button><button class="session-icon-button" id="add-convert-videos" title="Agregar videos" aria-label="Agregar videos"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button><button class="session-icon-button primary" id="process-all-videos" title="Procesar todo" aria-label="Procesar todo"><svg viewBox="0 0 24 24"><path d="M5 12h12"/><path d="M13 6l6 6-6 6"/></svg></button><button class="session-icon-button" id="convert-folder-settings" title="Exportar en carpeta" aria-label="Exportar en carpeta"><svg viewBox="0 0 24 24"><path d="M3.5 6.5h5l1.8 2H20a1 1 0 0 1 1 1v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z"/><path d="M3.5 10.5h17"/></svg></button></div></div><div class="video-session-list" id="convert-session-list"><div class="empty-mini">Sube uno o varios videos para armar la sesión.</div></div></section></aside>
+          <div class="video-controls-panel unified-video-controls"><div class="studio-tool-heading"><div><p class="eyebrow">VIDEO SELECCIONADO</p><h2>Recorte, calidad e IA</h2><small>Configura el video activo de la lista. El ajuste universal vive arriba en la sesión.</small></div><button class="primary-button image-process-button" id="process-ai-video"><span>Procesar seleccionado</span><b>→</b></button></div>
+            <div class="video-control-row">
+            <section class="video-control-section"><div class="control-section-title"><strong>Recortar</strong><button id="reset-video-trim">Video completo</button></div><div class="video-trim-slider"><div></div><i id="video-trim-selection"></i><input id="video-trim-start-range" type="range" min="0" max="100" value="0"><input id="video-trim-end-range" type="range" min="0" max="100" value="100"></div><div class="two-fields"><label>Inicio<input id="video-trim-start" value="00:00:00"></label><label>Final<input id="video-trim-end" value="00:00:00"></label></div></section>
+            <section class="video-control-section video-output-section"><div class="control-section-title output-title"><strong>Salida</strong><label class="toggle-line output-toggle"><input id="video-output-enabled" type="checkbox" checked><span></span><b>Activada</b></label></div><div class="video-option-grid video-output-fields" id="video-output-fields"><label>Formato<select id="video-output-format"><option value="h264">MP4 · H.264</option><option value="h265">MP4 · H.265</option><option value="prores">MOV · ProRes</option><option value="webm">WebM</option><option value="gif">GIF animado</option><option value="mp3">MP3 · audio</option><option value="wav">WAV · audio</option></select></label><label>Perfil<select id="video-output-profile"></select></label><label>Velocidad<select id="video-output-speed"><option value="veryfast">Muy rápida</option><option value="fast">Rápida</option><option value="medium" selected>Equilibrada</option><option value="slow">Máxima compresión</option></select></label></div><small class="video-output-help" id="video-output-help">El formato define automáticamente el códec correcto.</small></section>
+            <section class="video-control-section ai-video-section"><label class="toggle-line"><input id="video-ai-enabled" type="checkbox"><span></span><strong>Mejorar resolución con IA</strong></label><div class="video-option-grid"><label>Motor<select id="video-upscale-engine"><option value="Real-ESRGAN">Real-ESRGAN — recomendado</option><option value="Waifu2x">Waifu2x — ilustración</option><option value="RealSR">RealSR — fotografía</option><option value="SRMD">SRMD — general</option></select></label><label>Escala<select id="video-upscale-scale"><option value="2">2×</option><option value="4">4×</option></select></label><label class="wide-field">Modelo<select id="video-upscale-model"><option value="Anime Video v3 (Rápido, Multi-escala)">Anime Video v3</option><option value="x4 Plus (Fotos / General)">x4 Plus — fotografía</option><option value="x4 Plus Anime (Ilustraciones)">x4 Plus Anime</option></select></label></div></section>
+
+            </div>          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-assets">
+        <div class="page-heading compact"><div><p class="eyebrow">BIBLIOTECA</p><h1>SFX / VFX.<br><em>Listos para editar.</em></h1></div></div>
+        <div class="asset-library-shell">
+          <div class="asset-library-head">
+            <div><p class="eyebrow">ARCHIVOS RÁPIDOS</p><h2>Guarda efectos, pantallas verdes y recursos de edición.</h2><small>Los clips guardados desde Descargas aparecen aquí para escucharlos, verlos o mandarlos a Premiere.</small></div>
+            <div class="asset-library-actions"><button class="secondary-button" id="refresh-assets">Actualizar</button><button class="secondary-button" id="open-assets-folder">Abrir carpeta</button></div>
+          </div>
+          <div class="asset-tabs"><button class="active" data-asset-tab="all">Todo</button><button data-asset-tab="sfx">SFX</button><button data-asset-tab="vfx">VFX</button></div>
+          <div class="asset-list" id="asset-list"><div class="empty-mini">Todavía no hay SFX/VFX guardados.</div></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-queue">
+        <div class="section-header"><div><p class="eyebrow">ACTIVIDAD</p><h1>Cola de trabajos</h1><p class="queue-adobe-state" id="queue-adobe-state">Premiere sin conexión</p></div><div class="queue-header-actions"><button class="secondary-button premiere-send-all" id="send-all-adobe"><span class="premiere-icon">Pr</span> Enviar todo</button><button class="secondary-button" id="refresh-jobs">Actualizar</button></div></div>
+        <div class="queue-tabs" role="tablist">
+          <button class="queue-tab active" data-queue-tab="jobs" role="tab" aria-selected="true">Trabajos<b id="jobs-tab-count">0</b></button>
+          <button class="queue-tab" data-queue-tab="programs" role="tab" aria-selected="false">Programas<b id="programs-tab-count">0</b></button>
+        </div>
+        <div class="queue-pane active" id="queue-pane-jobs">
+          <div class="queue-list" id="queue-list"><div class="empty-list"><span>≡</span><h3>Aún no hay trabajos</h3><p>Las descargas y procesos aparecerán aquí.</p></div></div>
+        </div>
+        <div class="queue-pane" id="queue-pane-programs">
+          <div class="programs-summary">
+            <div class="programs-summary-info">
+              <p class="eyebrow">ALMACENAMIENTO</p>
+              <h2 id="programs-total-size">—</h2>
+              <p class="programs-summary-note">Espacio ocupado por todo lo que tienes descargado.</p>
+            </div>
+            <button class="secondary-button" id="refresh-programs">Actualizar</button>
+          </div>
+          <div class="programs-list" id="programs-list"><div class="settings-loading">Cargando componentes…</div></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-plugins">
+        <div class="page-heading compact plugin-heading">
+          <div>
+            <p class="eyebrow">ESCAPARATE</p>
+            <h1>Complementos.<br><em>Instala lo que necesites.</em></h1>
+          </div>
+          <div class="plugin-header-actions">
+            <button class="secondary-button icon-only-button" id="plugin-search-toggle" title="Buscar complementos" aria-label="Buscar complementos">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16.2 16.2 4.3 4.3"/></svg>
+            </button>
+            <button class="secondary-button icon-only-button" id="plugin-info-toggle" title="Acerca de los complementos" aria-label="Acerca de los complementos">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><circle cx="12" cy="8" r="0.5" fill="currentColor"/></svg>
+            </button>
+            <button class="secondary-button icon-only-button" id="refresh-plugins" title="Buscar actualizaciones" aria-label="Buscar actualizaciones">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5V8h-4.5"/></svg>
+            </button>
+            <button class="secondary-button hidden" id="update-all-plugins">Actualizar todo</button>
+          </div>
+        </div>
+
+        <div class="plugin-search-shell" id="plugin-search-shell" hidden>
+          <div class="plugin-search"><span>⌕</span><input id="plugin-search" placeholder="Buscar complementos, Adobe, IA, utilidades…"></div>
+        </div>
+        <div class="plugin-catalog-meta" id="plugin-catalog-meta">Catálogo local listo.</div>
+        <div class="plugin-filter-row">
+          <button class="active" data-plugin-filter="all">Todos</button>
+          <button data-plugin-filter="adobe">Adobe</button>
+          <button data-plugin-filter="clipdock">ClipDock</button>
+          <button data-plugin-filter="ai">IA</button>
+          <button data-plugin-filter="installed">Instalados</button>
+          <button data-plugin-filter="updates">Updates</button>
+        </div>
+
+        <div class="plugin-catalog-grid" id="plugin-catalog-list">
+          <div class="settings-loading">Cargando escaparate…</div>
+        </div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="section-header settings-heading"><div><p class="eyebrow">PREFERENCIAS</p><h1>Ajustes</h1></div><span class="save-state" id="settings-save-state">Guardado automáticamente</span></div>
+        <div class="settings-layout">
+          <nav class="settings-nav">
+            <button class="active" data-settings-section="overview">Inicio</button>
+            <button data-settings-section="general">General</button>
+            <button data-settings-section="interface">Apariencia</button>
+            <button data-settings-section="automation">Automatización</button>
+            <button data-settings-section="cookies">Cookies</button>
+            <button data-settings-section="components"><span>Componentes</span><b class="settings-update-count hidden" id="components-update-count">0</b></button>
+            <button data-settings-section="models"><span>Modelos de IA</span><b class="settings-update-count hidden" id="models-update-count">0</b></button>
+            <button data-settings-section="updates">Actualizaciones</button>
+            <button data-settings-section="about">Acerca de</button>
+          </nav>
+          <div class="settings-content">
+            <section class="settings-section active" id="settings-overview">
+              <p class="eyebrow">CENTRO DE CONTROL</p><h2>Estado rápido de ClipDock</h2><p class="settings-intro">Un resumen limpio para entrar directo a lo que necesitas sin perderte entre opciones técnicas.</p>
+              <div class="settings-status-grid">
+                <article class="settings-status-card ready"><span>Motor interno</span><strong id="overview-engine-status">Python portable listo</strong><small>Runtime incluido en la instalación.</small></article>
+                <article class="settings-status-card"><span>Componentes</span><strong id="overview-components-status">Leyendo…</strong><small>FFmpeg, Deno, Poppler, Inkscape y Ghostscript.</small></article>
+                <article class="settings-status-card"><span>Modelos IA</span><strong id="overview-models-status">Leyendo…</strong><small>Fondos, upscale y motores bajo demanda.</small></article>
+                <article class="settings-status-card"><span>Preparación inicial</span><strong id="overview-profile-status">Leyendo perfil…</strong><small>El perfil elegido se puede reparar desde Componentes.</small></article>
+                <article class="settings-status-card"><span>Actualizaciones</span><strong id="overview-update-status">Leyendo…</strong><small>Estado de la versión instalada.</small></article>
+              </div>
+              <div class="settings-hub-grid">
+                <button class="settings-hub-card" data-settings-jump="components"><span>01</span><strong>Componentes</strong><small>Motores multimedia, reparación del perfil y actualizaciones.</small></button>
+                <button class="settings-hub-card" data-settings-jump="models"><span>02</span><strong>IA y Modelos</strong><small>Modelos locales pesados instalables bajo demanda.</small></button>
+                <button class="settings-hub-card" data-settings-jump="updates"><span>03</span><strong>Actualizaciones</strong><small>Versión de ClipDock, releases y descarga manual preparada.</small></button>
+                <button class="settings-hub-card" data-settings-jump="interface"><span>04</span><strong>Apariencia</strong><small>Tamaño de interfaz, fuente y color de acento.</small></button>
+                <button class="settings-hub-card" data-settings-jump="cookies"><span>05</span><strong>Cookies</strong><small>Acceso a contenido restringido con cookies.txt.</small></button>
+                <button class="settings-hub-card" data-open-view="plugins"><span>06</span><strong>Complementos</strong><small>Escaparate e instalación de extensiones.</small></button>
+                <button class="settings-hub-card" data-settings-jump="general"><span>07</span><strong>General</strong><small>Carpeta de salida y comportamiento base.</small></button>
+                <button class="settings-hub-card about-jump" data-settings-jump="about"><span>08</span><strong>Acerca de</strong><small>La página de Depson queda intacta.</small></button>
+              </div>
+            </section>
+            <section class="settings-section" id="settings-general">
+              <p class="eyebrow">GENERAL</p><h2>Tu espacio de trabajo</h2><p class="settings-intro">Las rutas y preferencias se recuerdan entre sesiones.</p>
+              <div class="setting-card"><div><strong>Carpeta de salida</strong><small>Descargas, conversiones y resultados IA.</small><code id="settings-output-folder">Sin seleccionar</code></div><button class="secondary-button" id="settings-change-folder">Cambiar</button></div>
+              <div class="setting-card toggle-card"><div><strong>Guardar portada por defecto</strong><small>Incluye la miniatura junto a cada video descargado.</small></div><label class="switch"><input type="checkbox" data-setting="saveThumbnail"><span></span></label></div>
+              <div class="setting-card toggle-card"><div><strong>Analizar playlists</strong><small>Pregunta qué elementos descargar cuando detecta una lista.</small></div><label class="switch"><input type="checkbox" data-setting="playlistAnalysis"><span></span></label></div>
+              <p class="eyebrow settings-subheading">SISTEMA</p>
+              <div class="setting-card toggle-card"><div><strong>Minimizar a la bandeja al cerrar</strong><small>Al pulsar la X, ClipDock sigue corriendo en la bandeja. Para cerrarlo del todo, clic derecho sobre el icono → Cerrar ClipDock.</small></div><label class="switch"><input type="checkbox" id="pref-minimize-tray"><span></span></label></div>
+              <div class="setting-card toggle-card"><div><strong>Abrir al iniciar Windows</strong><small>ClipDock se inicia solo cuando enciendes el equipo.</small></div><label class="switch"><input type="checkbox" id="pref-auto-launch"><span></span></label></div>
+              <div class="setting-card toggle-card"><div><strong>Iniciar minimizado</strong><small>Al arrancar con Windows, ClipDock se queda en la bandeja sin abrir la ventana.</small></div><label class="switch"><input type="checkbox" id="pref-start-minimized"><span></span></label></div>
+            </section>
+            <section class="settings-section" id="settings-interface">
+              <p class="eyebrow">VISUAL</p><h2>Tema, tamaño de interfaz y fuente</h2><p class="settings-intro">Haz ClipDock más cómodo en monitores grandes o pantallas con mucha resolución. Los cambios se aplican al instante.</p>
+              <div class="accent-color-card">
+                <div class="accent-copy"><strong>Color de acento</strong><small>Botones preparados para personalizar el acento principal de la app.</small></div>
+                <div class="accent-color-row" aria-label="Color de acento">
+                  <button type="button" data-accent-color="acid" style="--swatch:#c9ff3d"><span></span>Verde</button>
+                  <button type="button" data-accent-color="violet" style="--swatch:#9a88ff"><span></span>Violeta</button>
+                  <button type="button" data-accent-color="cyan" style="--swatch:#62e6ff"><span></span>Cian</button>
+                  <button type="button" data-accent-color="rose" style="--swatch:#ff75b7"><span></span>Rosa</button>
+                  <button type="button" data-accent-color="orange" style="--swatch:#ffb347"><span></span>Naranja</button>
+                  <button type="button" data-accent-color="mint" style="--swatch:#6affd1"><span></span>Menta</button>
+                </div>
+              </div>
+              <div class="ui-scale-grid">
+                <div class="ui-scale-card">
+                  <div class="ui-scale-head"><div><strong>Tamaño de interfaz</strong><small>Aumenta botones, paneles, campos y separación general.</small></div><output id="interface-scale-value">100%</output></div>
+                  <input id="interface-scale" type="range" min="90" max="150" step="5" value="100">
+                  <div class="scale-presets" data-scale-target="interface-scale"><button data-scale-value="100">Normal</button><button data-scale-value="115">Grande</button><button data-scale-value="130">Pro grande</button><button data-scale-value="150">Máximo</button></div>
+                </div>
+                <div class="ui-scale-card">
+                  <div class="ui-scale-head"><div><strong>Tamaño de fuente</strong><small>Sube solo la lectura de títulos, botones, campos y tarjetas.</small></div><output id="font-scale-value">100%</output></div>
+                  <input id="font-scale" type="range" min="90" max="140" step="5" value="100">
+                  <div class="scale-presets" data-scale-target="font-scale"><button data-scale-value="100">Normal</button><button data-scale-value="110">Cómodo</button><button data-scale-value="125">Grande</button><button data-scale-value="140">Máximo</button></div>
+                </div>
+                <div class="ui-scale-card title-scale-card">
+                  <div class="ui-scale-head"><div><strong>Tamaño de los títulos</strong><small>Reduce o aumenta únicamente encabezados y nombres de secciones.</small></div><output id="title-scale-value">100%</output></div>
+                  <input id="title-scale" type="range" min="65" max="120" step="5" value="100">
+                  <div class="scale-presets" data-scale-target="title-scale"><button data-scale-value="75">Compacto</button><button data-scale-value="90">Discreto</button><button data-scale-value="100">Normal</button><button data-scale-value="115">Grande</button></div>
+                </div>
+              </div>
+              <div class="setting-card preview-scale-card"><div><strong>Vista previa</strong><small>Así se sentirá la escala elegida.</small><code>Botones, listas y textos se adaptan sin tocar el diseño base.</code></div><button class="primary-mini">ClipDock</button></div>
+            </section>
+            <section class="settings-section" id="settings-automation">
+              <p class="eyebrow">AUTOMATIZACIÓN</p><h2>Que el programa se adelante</h2><p class="settings-intro">Pequeñas decisiones automáticas que ahorran clics, siempre opcionales.</p>
+              <div class="setting-card toggle-card"><div><strong>Autopegar enlaces</strong><small>Al volver a ClipDock, coloca una URL nueva del portapapeles.</small></div><label class="switch"><input type="checkbox" data-setting="autoPaste"><span></span></label></div>
+              <div class="setting-card toggle-card"><div><strong>Analizar después de autopegar</strong><small>Abre automáticamente la ficha de formatos.</small></div><label class="switch"><input type="checkbox" data-setting="autoAnalyze"><span></span></label></div>
+              <div class="setting-card toggle-card"><div><strong>Router inteligente</strong><small>Imágenes van a IA; un video al taller; varios archivos a lote.</small></div><label class="switch"><input type="checkbox" data-setting="smartRoute"><span></span></label></div>
+              <div class="setting-card toggle-card"><div><strong>Enviar resultados a Adobe</strong><small>Importa automáticamente los trabajos terminados cuando Premiere está enlazado.</small></div><label class="switch"><input type="checkbox" data-setting="autoAdobe"><span></span></label></div>
+            </section>
+            <section class="settings-section" id="settings-cookies">
+              <p class="eyebrow">ACCESO</p><h2>Cookies.txt para contenido restringido</h2><p class="settings-intro">ClipDock solo acepta archivos <b>cookies.txt</b> en formato Netscape. No lee cookies directo del navegador; importa el archivo y lo usará automáticamente para analizar y descargar.</p>
+              <div class="cookie-helper-card">
+                <div class="cookie-helper-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 58c14.36 0 26-11.64 26-26a25.9 25.9 0 0 0-2.55-11.23 9.3 9.3 0 0 1-4.45 1.1A9.5 9.5 0 0 1 41.5 12.4a9.15 9.15 0 0 1 .15-1.65A25.8 25.8 0 0 0 32 6C17.64 6 6 17.64 6 32s11.64 26 26 26Z"/><circle cx="22" cy="22" r="3.7"/><circle cx="38" cy="29" r="3.2"/><circle cx="25" cy="41" r="4.2"/><circle cx="43" cy="45" r="2.5"/></svg></div>
+                <div class="cookie-helper-copy"><strong>Get cookies.txt LOCALLY</strong><small>Instala la extensión, entra a YouTube, exporta en formato <b>Netscape / cookies.txt</b> y ClipDock lo importa a Documentos/ClipDock/Cookies.</small></div>
+                <div class="cookie-helper-actions"><button class="primary-mini" id="install-cookie-chrome">Instalar Chrome/Edge</button><button class="secondary-mini" id="install-cookie-firefox">Instalar Firefox</button><button class="secondary-mini" id="open-cookie-github">GitHub</button></div>
+              </div>
+              <div class="cookie-steps">
+                <div><b>1</b><span>Instala la extensión y abre YouTube con tu cuenta.</span></div>
+                <div><b>2</b><span>Exporta cookies de la pestaña en formato cookies.txt, no JSON.</span></div>
+                <div><b>3</b><span>Importa el archivo aquí y ClipDock lo usará automáticamente.</span></div>
+              </div>
+              <div class="cookie-import-row"><button class="primary-button" id="import-cookie-export"><span>Importar cookies.txt exportado</span><b>↓</b></button><button class="secondary-button" id="test-cookies">Probar cookies</button><button class="secondary-button" id="open-cookies-folder">Abrir carpeta de cookies</button></div>
+              <div class="cookie-status-card hidden" id="cookie-status-card"><strong id="cookie-status-title">Sin cookies importadas</strong><small id="cookie-status-detail">Importa un archivo cookies.txt para activarlo.</small><code id="cookie-current-path">Sin seleccionar</code></div>
+              <div class="cookies-hidden-fields hidden" aria-hidden="true"><select id="cookie-mode"><option value="file">Archivo cookies.txt</option></select><input id="cookie-file"><select id="cookie-browser"><option></option></select><input id="cookie-profile"><div id="cookie-file-panel"></div><div id="cookie-browser-panel"></div><button id="pick-cookie" type="button"></button></div>
+            </section>
+            <section class="settings-section" id="settings-components">
+              <div class="models-heading"><div><p class="eyebrow">MOTORES</p><h2>Componentes multimedia <b class="settings-update-count section-count hidden" id="components-heading-count">0</b></h2></div><div class="settings-heading-actions"><button class="secondary-button" id="check-component-updates">Buscar actualizaciones</button><button class="secondary-button" id="open-components-folder">Abrir carpeta</button></div></div><p class="settings-intro">Estado de las herramientas externas que habilitan cada tipo de archivo. Se guardan en Documentos/ClipDock/Componentes para poder actualizar, borrar o limpiar sin tocar el programa.</p>
+              <div class="setup-repair-card" id="setup-repair-card">
+                <div class="setup-repair-copy">
+                  <p class="eyebrow">PREPARACIÓN INICIAL</p>
+                  <h3>Reparar perfil elegido</h3>
+                  <small id="setup-repair-summary">Leyendo perfil inicial…</small>
+                  <code id="setup-repair-log">Último log: pendiente</code>
+                  <div class="inline-progress setup-repair-progress hidden" id="setup-repair-progress"><i id="setup-repair-progress-bar" style="width:0%"></i></div>
+                  <small class="setup-repair-status" id="setup-repair-status">Instala únicamente lo que falte del perfil elegido en la primera apertura.</small>
+                </div>
+                <div class="setup-repair-actions">
+                  <button class="primary-mini" id="repair-runtime-profile">Reparar perfil</button>
+                  <button class="secondary-mini" id="open-setup-logs">Abrir logs</button>
+                  <button class="secondary-mini" id="open-last-setup-log">Ver último log</button>
+                </div>
+              </div>
+              <div class="component-list" id="component-list"><div class="settings-loading">Comprobando componentes…</div></div>
+            </section>
+            <section class="settings-section" id="settings-models">
+              <div class="models-heading"><div><p class="eyebrow">INTELIGENCIA ARTIFICIAL</p><h2>Modelos bajo demanda <b class="settings-update-count section-count hidden" id="models-heading-count">0</b></h2></div><div class="settings-heading-actions"><button class="secondary-button" id="check-model-updates">Buscar actualizaciones</button><button class="secondary-button" id="open-models-folder">Abrir carpeta</button></div></div><p class="settings-intro">Instala solo lo que vas a usar. Se guardan en Documentos/ClipDock/Modelos para poder actualizar, borrar o limpiar archivos pesados sin tocar el programa.</p>
+              <div class="model-list" id="model-list"><div class="settings-loading">Leyendo modelos…</div></div>
+            </section>
+            <section class="settings-section" id="settings-updates">
+              <p class="eyebrow">VERSIONES</p><h2>Actualizaciones del programa</h2><p class="settings-intro">ClipDock actualizará únicamente desde GitHub Releases. La app compara versiones, descarga el paquete publicado y abre el instalador cuando haya una versión nueva.</p>
+              <div class="update-hero">
+                <div><span>INSTALADA</span><strong id="app-version-label">0.0.0</strong><small>Esta versión se lee desde package.json.</small></div>
+                <button class="secondary-button" id="check-updates">Buscar actualización</button>
+              </div>
+              <div class="setting-card update-card"><div><strong>Estado</strong><small id="update-status">Configura owner/repo en update-config.json para activar GitHub Releases.</small><div class="inline-progress update-progress"><i id="update-progress-bar" style="width:0%"></i></div></div><div class="update-actions"><button class="primary-mini hidden" id="install-update">Descargar e instalar</button></div></div>
+              <div class="setting-card update-card github-update-card"><div><strong>Repositorio GitHub</strong><small>El repo solo se muestra aquí dentro del menú de actualizaciones.</small><code id="github-repo-label">Pendiente: TU_USUARIO/clipdock</code></div><div class="update-actions"><button class="secondary-button github-repo-button" id="open-github-repo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.52 2.87 8.36 6.84 9.72.5.1.68-.22.68-.5v-1.76c-2.78.62-3.36-1.2-3.36-1.2-.45-1.2-1.1-1.51-1.1-1.51-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.36-2.22-.26-4.55-1.14-4.55-5.07 0-1.12.39-2.04 1.03-2.76-.1-.26-.45-1.3.1-2.72 0 0 .84-.28 2.75 1.05A9.3 9.3 0 0 1 12 6.1c.85 0 1.7.12 2.5.34 1.9-1.33 2.74-1.05 2.74-1.05.55 1.42.2 2.46.1 2.72.64.72 1.03 1.64 1.03 2.76 0 3.94-2.34 4.81-4.57 5.07.36.32.68.94.68 1.9v2.82c0 .28.18.6.69.5A10.15 10.15 0 0 0 22 12.26C22 6.58 17.52 2 12 2Z"/></svg><span>Abrir GitHub</span></button></div></div>
+            </section>
+            <section class="settings-section" id="settings-about">
+              <p class="eyebrow">ACERCA DE</p><h2>ClipDock por Depson</h2><p class="settings-intro">Un pequeño espacio para saber quién hizo el programa, dónde seguir el proyecto y dejar una nota más humana dentro de la app.</p>
+              <div class="about-hero-card">
+                <div class="about-avatar" aria-hidden="true"><span>D</span></div>
+                <div class="about-main-copy">
+                  <span class="about-kicker">CREADO POR</span>
+                  <h3>Depson</h3>
+                  <p>ClipDock nació para juntar descarga, conversión, mejora con IA e integración con Adobe en una sola herramienta rápida para creadores.</p>
+                  <div class="about-meta-row"><span>ClipDock <b id="about-version-label">0.0.0</b></span><span>@depsonop</span><span>Windows · Premiere</span></div>
+                </div>
+                <div class="about-hero-actions">
+                  <button class="donate-button" data-about-link="https://www.paypal.com/paypalme/ppdepson">Donar en PayPal</button>
+                  <button class="secondary-button" id="copy-about-handle">Copiar @depsonop</button>
+                </div>
+              </div>
+              <div class="about-social-grid">
+                <button data-about-link="https://www.instagram.com/depsonop"><strong>Instagram</strong><small>@depsonop</small></button>
+                <button data-about-link="https://www.tiktok.com/@depsonop"><strong>TikTok</strong><small>@depsonop</small></button>
+                <button data-about-link="https://www.youtube.com/@depsonop"><strong>YouTube</strong><small>@depsonop</small></button>
+                <button data-about-link="https://x.com/depsonop"><strong>X / Twitter</strong><small>@depsonop</small></button>
+                <button data-about-link="https://github.com/depsoniac"><strong>GitHub</strong><small>depsoniac</small></button>
+                <button data-about-link="https://github.com/depsoniac/ClipDock"><strong>Repositorio</strong><small>ClipDock</small></button>
+              </div>
+              <div class="about-letter-card">
+                <p class="eyebrow">CARTA DEL CREADOR</p>
+                <h3>Gracias por usar ClipDock</h3>
+                <p>Hice este programa pensando en ese momento donde solo quieres bajar un clip, convertirlo, mejorar una imagen o llevar material a Premiere sin pelearte con mil ventanas. Si ClipDock te ahorra tiempo, ya cumplió su misión.</p>
+                <p>Gracias por probarlo, compartirlo y reportar errores. Cada versión va puliendo un pedacito más del flujo de trabajo.</p>
+                <strong>— Depson</strong>
+              </div>
+              <div class="about-info-grid">
+                <div class="about-info-card"><span>01</span><strong>Créditos</strong><small>Incluye tecnologías open-source y herramientas externas para descargas, video, documentos e IA.</small></div>
+                <div class="about-info-card"><span>02</span><strong>Actualizaciones</strong><small>Las nuevas versiones se publican mediante GitHub Releases desde el menú de Actualizaciones.</small></div>
+                <div class="about-info-card about-contact-card"><span>03</span><strong>Feedback y bugs</strong><small>Para reportar errores, pedir mejoras o mandar ideas: <b>depsoncontacto@gmail.com</b></small><button data-about-link="mailto:depsoncontacto@gmail.com?subject=Feedback%20ClipDock">Enviar feedback</button></div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="setup-backdrop hidden" id="runtime-setup-modal" role="dialog" aria-modal="true" aria-labelledby="runtime-setup-title">
+      <section class="runtime-setup-card">
+        <div class="runtime-setup-hero">
+          <div>
+            <p class="eyebrow">PRIMERA CONFIGURACIÓN</p>
+            <h2 id="runtime-setup-title">¿Cuánto descargamos hoy?</h2>
+            <p>Todo ClipDock es gratis. Esto solo decide cuántas herramientas se descargan ahora para ahorrar espacio y tiempo; las demás quedan a un clic en Ajustes.</p>
+          </div>
+        </div>
+        <div class="runtime-setup-options" aria-label="Opciones de instalación">
+          <button class="runtime-option" data-setup-profile="light">
+            <span class="runtime-option-icon" aria-hidden="true">◌</span>
+            <small>Ligero</small>
+            <strong>Para empezar rápido</strong>
+            <p>Solo lo básico para descargar, recortar y convertir.</p>
+            <ul><li>Motor Python mini</li><li>Descargas</li><li>Convertir y recortar</li><li>Componentes mínimos</li></ul>
+            <div class="profile-weight"><span>Descarga ahora</span><div class="weight-bar"><i style="width:18%"></i></div><em>300–800 MB</em></div>
+            <b>Preparar ligero →</b>
+          </button>
+          <button class="runtime-option recommended" data-setup-profile="recommended">
+            <span class="runtime-ribbon">Sugerido</span>
+            <span class="runtime-option-icon" aria-hidden="true">⚡</span>
+            <small>Recomendado</small>
+            <strong>Para editar todos los días</strong>
+            <p>Lo común para video, audio, imágenes y documentos.</p>
+            <ul><li>Todo lo ligero</li><li>Procesamiento de imágenes</li><li>Herramientas comunes</li></ul>
+            <div class="profile-weight"><span>Descarga ahora</span><div class="weight-bar"><i style="width:45%"></i></div><em>1–2 GB</em></div>
+            <b>Preparar recomendado →</b>
+          </button>
+          <button class="runtime-option full" data-setup-profile="full-ai">
+            <span class="runtime-option-icon" aria-hidden="true">✦</span>
+            <small>Completo con IA</small>
+            <strong>Para IA local avanzada</strong>
+            <p>Todo lo anterior más los modelos de IA local pesados.</p>
+            <ul><li>Todo recomendado</li><li>Mejorar con IA</li><li>Quitar fondo y modelos</li></ul>
+            <div class="profile-weight"><span>Descarga ahora</span><div class="weight-bar"><i style="width:88%"></i></div><em>2–5 GB</em></div>
+            <b>Preparar completo →</b>
+          </button>
+        </div>
+        <div class="runtime-setup-note">
+          <span>i</span>
+          <p>El perfil no limita nada: en Ajustes siempre verás <b>todos</b> los componentes y modelos de IA para instalarlos o quitarlos cuando quieras.<small>Si una herramienta ya existe en tu PC (por ejemplo FFmpeg instalado en Windows), ClipDock la aprovecha y no la vuelve a descargar.</small></p>
+        </div>
+        <section class="runtime-repos" aria-label="Repositorios que usa ClipDock">
+          <div class="runtime-repos-head compact">
+            <div class="runtime-repos-title">
+              <span class="runtime-repos-github" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.08 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.9-1.32 2.74-1.05 2.74-1.05.56 1.42.21 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.95-2.34 4.82-4.57 5.08.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.18.59.69.49A10.24 10.24 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"/></svg>
+              </span>
+              <div><strong>Repos que usa ClipDock</strong></div>
+            </div>
+          </div>
+          <div class="runtime-repos-marquee">
+            <div class="runtime-repos-track" id="runtime-repos-track">
+              <button type="button" class="runtime-repo-card minimal" data-runtime-link="https://github.com/depsoniac/ClipDock"><span class="repo-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.08 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.9-1.32 2.74-1.05 2.74-1.05.56 1.42.21 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.95-2.34 4.82-4.57 5.08.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.18.59.69.49A10.24 10.24 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"/></svg></span><strong>ClipDock</strong></button>
+              <button type="button" class="runtime-repo-card minimal" data-runtime-link="https://github.com/yt-dlp/yt-dlp"><span class="repo-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.08 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.9-1.32 2.74-1.05 2.74-1.05.56 1.42.21 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.95-2.34 4.82-4.57 5.08.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.18.59.69.49A10.24 10.24 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"/></svg></span><strong>yt-dlp</strong></button>
+              <button type="button" class="runtime-repo-card minimal" data-runtime-link="https://github.com/GyanD/codexffmpeg"><span class="repo-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.08 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.9-1.32 2.74-1.05 2.74-1.05.56 1.42.21 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.95-2.34 4.82-4.57 5.08.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.18.59.69.49A10.24 10.24 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"/></svg></span><strong>FFmpeg</strong></button>
+              <button type="button" class="runtime-repo-card minimal" data-runtime-link="https://github.com/oschwartz10612/poppler-windows"><span class="repo-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.08 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.9-1.32 2.74-1.05 2.74-1.05.56 1.42.21 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.95-2.34 4.82-4.57 5.08.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.18.59.69.49A10.24 10.24 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"/></svg></span><strong>Poppler</strong></button>
+              <button type="button" class="runtime-repo-card minimal" data-runtime-link="https://github.com/danielgatis/rembg"><span class="repo-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.08 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.9-1.32 2.74-1.05 2.74-1.05.56 1.42.21 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.95-2.34 4.82-4.57 5.08.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.18.59.69.49A10.24 10.24 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"/></svg></span><strong>rembg</strong></button>
+              <button type="button" class="runtime-repo-card minimal" data-runtime-link="https://github.com/xinntao/Real-ESRGAN"><span class="repo-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.08 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.9-1.32 2.74-1.05 2.74-1.05.56 1.42.21 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.95-2.34 4.82-4.57 5.08.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.18.59.69.49A10.24 10.24 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"/></svg></span><strong>Real-ESRGAN</strong></button>
+              <button type="button" class="runtime-repo-card minimal" data-runtime-link="https://github.com/nihui/waifu2x-ncnn-vulkan"><span class="repo-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.08 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.9-1.32 2.74-1.05 2.74-1.05.56 1.42.21 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.95-2.34 4.82-4.57 5.08.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.18.59.69.49A10.24 10.24 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"/></svg></span><strong>waifu2x-ncnn-vulkan</strong></button>
+              <button type="button" class="runtime-repo-card minimal" data-runtime-link="https://github.com/depsoniac/ClipDock" aria-hidden="true" tabindex="-1"><span class="repo-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.08 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.9-1.32 2.74-1.05 2.74-1.05.56 1.42.21 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.95-2.34 4.82-4.57 5.08.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.18.59.69.49A10.24 10.24 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"/></svg></span><strong>ClipDock</strong></button>
+              <button type="button" class="runtime-repo-card minimal" data-runtime-link="https://github.com/yt-dlp/yt-dlp" aria-hidden="true" tabindex="-1"><span class="repo-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.08 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.9-1.32 2.74-1.05 2.74-1.05.56 1.42.21 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.95-2.34 4.82-4.57 5.08.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.18.59.69.49A10.24 10.24 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"/></svg></span><strong>yt-dlp</strong></button>
+              <button type="button" class="runtime-repo-card minimal" data-runtime-link="https://github.com/GyanD/codexffmpeg" aria-hidden="true" tabindex="-1"><span class="repo-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.08 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.9-1.32 2.74-1.05 2.74-1.05.56 1.42.21 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.95-2.34 4.82-4.57 5.08.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.18.59.69.49A10.24 10.24 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"/></svg></span><strong>FFmpeg</strong></button>
+              <button type="button" class="runtime-repo-card minimal" data-runtime-link="https://github.com/oschwartz10612/poppler-windows" aria-hidden="true" tabindex="-1"><span class="repo-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.58 2 12.24c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.08 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.36 1.9-1.32 2.74-1.05 2.74-1.05.56 1.42.21 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.95-2.34 4.82-4.57 5.08.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.18.59.69.49A10.24 10.24 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"/></svg></span><strong>Poppler</strong></button>
+            </div>
+          </div>
+        </section>
+        <div class="runtime-setup-progress hidden" id="runtime-setup-progress" aria-live="polite">
+          <div class="runtime-progress-head">
+            <strong id="runtime-setup-progress-title">Preparando ClipDock</strong>
+            <span id="runtime-setup-progress-percent">0%</span>
+          </div>
+          <div class="runtime-progress-bar"><i id="runtime-setup-progress-bar"></i></div>
+          <div class="runtime-progress-meta hidden" id="runtime-setup-progress-meta"></div>
+          <p id="runtime-setup-progress-message">Esperando instalación…</p>
+          <div class="runtime-progress-actions hidden" id="runtime-setup-progress-actions">
+            <button type="button" class="secondary-button" id="runtime-setup-retry">Reintentar</button>
+            <button type="button" class="primary-button" id="runtime-setup-continue"><span>Continuar</span><b>→</b></button>
+          </div>
+          <div class="runtime-setup-explore">
+            <span>Mientras se descargan los complementos:</span>
+            <button type="button" class="secondary-button runtime-explore-button" id="runtime-setup-explore">
+              <span>Echar un vistazo</span>
+              <b aria-hidden="true">→</b>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="modal-backdrop hidden" id="plugin-detail-modal">
+      <div class="plugin-detail-card" id="plugin-detail-card" role="dialog" aria-modal="true"></div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="plugin-info-modal">
+      <div class="plugin-info-card" role="dialog" aria-modal="true" aria-labelledby="plugin-info-title">
+        <button class="confirm-close" id="close-plugin-info" aria-label="Cerrar">×</button>
+        <div class="plugin-info-hero">
+          <div class="plugin-info-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 4.5h14l1.6 4.7H3.4L5 4.5Z"/><path d="M4.6 9.2v9a1.8 1.8 0 0 0 1.8 1.8h11.2a1.8 1.8 0 0 0 1.8-1.8v-9"/><path d="M9.6 20v-5.2h4.8V20"/></svg>
+          </div>
+          <div>
+            <p class="eyebrow">ESCAPARATE</p>
+            <h2 id="plugin-info-title">Complementos hechos por Depson</h2>
+            <p>Cada extensión de esta tienda la desarrollo yo mismo para que ClipDock y Premiere trabajen mejor juntos. Se instalan y actualizan desde aquí, sin salir de la app.</p>
+          </div>
+        </div>
+        <div class="plugin-info-grid">
+          <article>
+            <span class="plugin-info-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9.5 18h5"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.8.6 1.2 1.3 1.3 2.1h4.4c.1-.8.5-1.5 1.3-2.1A6 6 0 0 0 12 3Z"/></svg></span>
+            <strong>¿Tienes una idea?</strong>
+            <small>Si se te ocurre un complemento o una mejora, cuéntamela por correo. Las mejores ideas terminan aquí.</small>
+            <button class="secondary-mini" data-plugin-info-link="mailto:depsoncontacto@gmail.com?subject=Idea%20para%20complementos%20ClipDock">Proponer idea</button>
+          </article>
+          <article>
+            <span class="plugin-info-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="5.5"/><path d="M12 7.5V5M8.5 8.5 6.8 6.8M15.5 8.5l1.7-1.7M6.5 13H4M20 13h-2.5M8.5 17.5 7 19M15.5 17.5 17 19"/></svg></span>
+            <strong>¿Encontraste un bug?</strong>
+            <small>Escríbeme qué pasó y en qué complemento. Con una captura o un log me ayudas el doble.</small>
+            <button class="secondary-mini" data-plugin-info-link="mailto:depsoncontacto@gmail.com?subject=Bug%20en%20complementos%20ClipDock">Reportar bug</button>
+          </article>
+          <article>
+            <span class="plugin-info-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9-8.5C1.6 8.6 3.6 5.5 6.8 5.5c2 0 3.4 1.1 4.2 2.3.8-1.2 2.2-2.3 4.2-2.3 3.2 0 5.2 3.1 3.8 6-2 4.1-9 8.5-9 8.5Z"/></svg></span>
+            <strong>¿Te sirve ClipDock?</strong>
+            <small>Todo esto es gratis. Si te ahorra tiempo y quieres apoyar el proyecto, se agradece muchísimo.</small>
+            <button class="secondary-mini paypal-mini" data-plugin-info-link="https://www.paypal.com/paypalme/ppdepson">Apoyar en PayPal</button>
+          </article>
+        </div>
+        <div class="plugin-info-footer">
+          <span>depsoncontacto@gmail.com</span>
+          <span>@depsonop</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="confirm-modal">
+      <div class="confirm-card" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+        <button class="confirm-close" id="confirm-close" aria-label="Cerrar">×</button>
+        <div class="confirm-symbol" id="confirm-symbol">!</div>
+        <p class="eyebrow" id="confirm-eyebrow">CONFIRMAR ACCIÓN</p>
+        <h2 id="confirm-title">¿Quieres continuar?</h2>
+        <p class="confirm-message" id="confirm-message"></p>
+        <div class="confirm-detail" id="confirm-detail"><span>i</span><p></p></div>
+        <div class="confirm-actions"><button class="secondary-button" id="confirm-cancel">Cancelar</button><button class="primary-button" id="confirm-accept"><span>Continuar</span><b>→</b></button></div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="startup-update-modal">
+      <div class="startup-update-card" role="dialog" aria-modal="true" aria-labelledby="startup-update-title">
+        <button class="confirm-close" id="startup-update-close" aria-label="Cerrar">×</button>
+        <div class="startup-update-icon" aria-hidden="true">↻</div>
+        <p class="eyebrow">ACTUALIZACIONES</p>
+        <h2 id="startup-update-title">Actualizaciones disponibles</h2>
+        <p class="confirm-message" id="startup-update-message">Hay actualizaciones disponibles. Se recomienda instalarlas para evitar errores de funcionamiento.</p>
+        <ul class="startup-update-list" id="startup-update-list"></ul>
+        <div class="confirm-detail startup-update-detail"><span>i</span><p id="startup-update-detail">Puedes cerrar este aviso y seguir trabajando.</p></div>
+        <div class="inline-progress startup-update-progress"><i id="startup-update-progress-bar" style="width:0%"></i></div>
+        <p class="startup-update-status" id="startup-update-status">Listo para actualizar.</p>
+        <div class="confirm-actions"><button class="secondary-button" id="startup-update-later">Cerrar por ahora</button><button class="primary-button" id="startup-update-action"><span>Actualizar</span><b>→</b></button></div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="component-required-modal">
+      <div class="required-component-card">
+        <div class="modal-head"><div><p class="eyebrow">MOTOR REQUERIDO</p><h2>Falta un componente</h2><p id="required-component-message">ClipDock necesita completar su motor para continuar.</p></div><button id="close-component-required" aria-label="Cerrar">×</button></div>
+        <ul id="required-component-list"></ul>
+        <div class="required-component-note"><span>✓</span><p><strong>Sin configuraciones raras</strong><small>ClipDock lo descarga y lo deja listo en Documentos/ClipDock/Componentes.</small></p></div>
+        <div class="required-component-actions"><button class="secondary-button" id="required-component-settings">Ver Componentes</button><button class="primary-button" id="required-component-install"><span>Instalar ahora</span><b>↓</b></button></div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="universal-modal">
+      <div class="recode-modal"><div class="modal-head"><div><p class="eyebrow">AJUSTE UNIVERSAL</p><h2>Una receta para toda la sesión</h2><p id="universal-scope">Se aplicará a todos los videos preparados.</p></div><button id="close-universal">×</button></div>
+        <div class="recode-tabs"><button class="active" data-recode-tab="quick">Modo rápido</button><button data-recode-tab="manual">Modo manual</button></div>
+        <section class="recode-section active" id="recode-quick"><p class="modal-help">Elige el formato de salida y luego la calidad. ClipDock configura el resto automáticamente.</p><div class="quick-preset-menus"><label>1 · Formato<select id="quick-format"></select></label><label>2 · Calidad<select id="quick-profile"></select></label><div class="quick-output-card" id="quick-output-card"></div></div></section>
+        <section class="recode-section" id="recode-manual"><div class="manual-grid"><label>Contenedor<select id="manual-container"><option value="mp4">MP4</option><option value="mov">MOV</option><option value="webm">WebM</option><option value="gif">GIF</option><option value="mp3">MP3</option><option value="wav">WAV</option></select></label><label>Códec de video<select id="manual-video-codec"><option value="h264">H.264</option><option value="h265">H.265</option><option value="vp9">VP9</option><option value="av1">AV1</option><option value="prores">ProRes</option><option value="copy">Sin recodificar</option><option value="none">Sin video</option></select></label><label>Calidad CRF<input id="manual-quality" type="number" min="0" max="40" value="23"></label><label>Velocidad<select id="manual-speed"><option value="veryfast">Muy rápida</option><option value="medium" selected>Equilibrada</option><option value="slow">Máxima compresión</option></select></label><label>Códec de audio<select id="manual-audio-codec"><option value="aac">AAC</option><option value="mp3">MP3</option><option value="opus">Opus</option><option value="pcm">PCM sin compresión</option><option value="copy">Sin recodificar</option><option value="none">Sin audio</option></select></label><label>Bitrate de audio<select id="manual-audio-bitrate"><option value="128k">128 kbps</option><option value="192k" selected>192 kbps</option><option value="256k">256 kbps</option><option value="320k">320 kbps</option></select></label><label>Ancho<input id="manual-width" type="number" placeholder="Automático"></label><label>Alto<input id="manual-height" type="number" placeholder="Automático"></label><label>FPS<input id="manual-fps" type="number" min="1" max="240" placeholder="Original"></label></div></section>
+        <section class="recode-extras-static"><div class="extras-heading"><p class="eyebrow">EXTRAS</p><span>Se aplican junto al modo elegido</span></div><div class="extras-list"><label><input id="extra-thumbnail" type="checkbox" checked><span><strong>Guardar portada</strong><small>Descarga la miniatura junto al video.</small></span></label><div class="extras-subtitle-card"><label class="subtitle-toggle-row"><input id="extra-subtitles" type="checkbox"><span><strong>Descargar subtítulos</strong><small id="subtitle-summary">Elige idioma y formato disponible.</small></span></label><div class="subtitle-options" id="subtitle-options"><label>Idioma<select id="extra-subtitle-lang"></select></label><label>Formato<select id="extra-subtitle-format"><option value="srt">Automático (.srt)</option><option value="json3">Automático (.json3)</option><option value="srv1">Automático (.srv1)</option><option value="srv2">Automático (.srv2)</option><option value="srv3">Automático (.srv3)</option><option value="ttml">Automático (.ttml)</option><option value="vtt">Automático (.vtt)</option></select></label></div></div><label><input id="extra-adobe" type="checkbox"><span><strong>Enviar a Premiere al terminar</strong><small>Importa el resultado al bin activo.</small></span></label><label><input id="extra-keep-original" type="checkbox" checked><span><strong>Conservar descarga original</strong><small>Mantiene el archivo previo a la recodificación.</small></span></label></div></section>
+        <div class="modal-footer"><label class="disable-recode-toggle"><input id="disable-recode" type="checkbox" checked><span></span><div><strong>Sin recodificar</strong><small>Conservar el formato descargado</small></div></label><div class="modal-apply"><div id="recode-summary">Sin recodificar · descarga directa</div><button class="primary-button" id="apply-universal"><span>Aplicar a la sesión</span><b>✓</b></button></div></div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="image-folder-modal">
+      <div class="folder-export-modal-card">
+        <div class="modal-head"><div><p class="eyebrow">EXPORTAR EN CARPETA</p><h2>Nombre de carpeta</h2><p>Cuando proceses todas las imágenes, ClipDock usará esta carpeta dentro de la salida elegida.</p></div><button id="close-image-folder" aria-label="Cerrar">×</button></div>
+        <label class="folder-export-field">Nombre carpeta<input id="image-folder-name" placeholder="Ej. Fotos cliente, PNG limpios, WebP"></label>
+        <div class="fragment-actions"><button class="secondary-button" id="cancel-image-folder">Cancelar</button><button class="primary-button" id="apply-image-folder"><span>Aceptar</span><b>✓</b></button></div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="convert-folder-modal">
+      <div class="folder-export-modal-card">
+        <div class="modal-head"><div><p class="eyebrow">EXPORTAR EN CARPETA</p><h2>Nombre de carpeta</h2><p>Cuando proceses toda la sesión, ClipDock usará esta carpeta dentro de la salida elegida.</p></div><button id="close-convert-folder" aria-label="Cerrar">×</button></div>
+        <label class="folder-export-field">Nombre carpeta<input id="convert-folder-name" placeholder="Ej. Entrega cliente, GIFs, Recortes"></label>
+        <div class="fragment-actions"><button class="secondary-button" id="cancel-convert-folder">Cancelar</button><button class="primary-button" id="apply-convert-folder"><span>Aceptar</span><b>✓</b></button></div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="fragment-modal">
+      <div class="fragment-modal-card"><div class="modal-head"><div><p class="eyebrow">DESCARGAR FRAGMENTO</p><h2 id="fragment-title">Selecciona el tramo</h2><p>Arrastra ambos puntos o escribe los tiempos exactos.</p></div><button id="close-fragment">×</button></div><div class="fragment-cover" id="fragment-cover"></div><div class="trim-slider" id="trim-slider"><div class="trim-track"></div><div class="trim-selection" id="trim-selection"></div><input id="trim-start-range" type="range" min="0" max="100" value="0"><input id="trim-end-range" type="range" min="0" max="100" value="100"></div><div class="trim-times"><label>Inicio<input id="fragment-start" value="00:00:00"></label><span id="fragment-duration-label">Duración completa</span><label>Final<input id="fragment-end" value="00:00:00"></label></div><div class="fragment-actions"><button class="secondary-button" id="disable-fragment">Usar video completo</button><button class="primary-button" id="apply-fragment"><span>Listo</span><b>✓</b></button></div></div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="asset-capture-modal">
+      <div class="asset-capture-modal-card">
+        <div class="modal-head"><div><p class="eyebrow" id="asset-capture-kind">SFX</p><h2>Guardar fragmento</h2><p id="asset-capture-title">Recorta el video y mándalo a tu biblioteca.</p></div><button id="close-asset-capture">×</button></div>
+        <div class="asset-trim-preview" id="asset-capture-cover"><span>▶</span></div>
+        <div class="trim-slider asset-trim-slider"><div class="trim-track"></div><i class="trim-selection" id="asset-trim-selection"></i><input id="asset-start-range" type="range" min="0" max="100" value="0"><input id="asset-end-range" type="range" min="0" max="100" value="100"></div>
+        <div class="trim-times"><label>Inicio<input id="asset-start" value="00:00:00"></label><span id="asset-duration-label">Duración completa</span><label>Final<input id="asset-end" value="00:00:00"></label></div>
+        <label class="asset-name-field">Nombre opcional<input id="asset-custom-name" placeholder="Ej. grito, pantalla verde, golpe metálico"></label>
+        <div class="fragment-actions"><button class="secondary-button" id="asset-full-video">Video completo</button><button class="primary-button" id="save-asset-fragment"><span>Guardar en biblioteca</span><b>→</b></button></div>
+      </div>
+    </div>
+
+
+    <div class="easter-egg-backdrop hidden" id="dowp-easter-modal" aria-hidden="true">
+      <div class="dowp-easter-card" role="dialog" aria-modal="true" aria-label="RIP Dowp">
+        <button class="dowp-easter-close" id="dowp-easter-close" type="button" aria-label="Cerrar easter egg">×</button>
+        <div class="dowp-easter-glow" aria-hidden="true"></div>
+        <div class="dowp-easter-video-wrap">
+          <video id="dowp-easter-video" src="../assets/easter/doc-hudson-cars.mp4" autoplay muted loop playsinline preload="auto"></video>
+        </div>
+        <div class="dowp-easter-caption">
+          <span>easter egg desbloqueado</span>
+          <strong>RIP Dowp</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="drop-overlay" id="drop-overlay"><div><span>＋</span><strong>Suelta los archivos</strong><small>ClipDock elegirá la herramienta adecuada</small></div></div>
+    <div class="toast-stack" id="toast-stack"></div>
+  </div>
+  <script src="app.js?v=0.5.49"></script>
+</body>
+</html>

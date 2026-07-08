@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>ClipDock</title>
+<style>
+  :root{
+    --acid:#c9ff3d;
+    --purple:#9a88ff;
+  }
+  html,body{
+    margin:0;height:100%;overflow:hidden;
+    background:transparent;
+    font-family:Inter,"Segoe UI",Arial,sans-serif;
+    -webkit-user-select:none;user-select:none;
+    -webkit-font-smoothing:antialiased;
+  }
+  .stage{
+    height:100vh;width:100vw;
+    display:grid;place-items:center;
+  }
+  /* Rombo: cuadrado rotado 45° con esquinas suaves */
+  .diamond{
+    position:relative;
+    width:305px;height:305px;
+    transform:rotate(45deg);
+    border-radius:30px;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 18% 14%, rgba(201,255,61,.16), transparent 42%),
+      radial-gradient(circle at 86% 88%, rgba(154,136,255,.2), transparent 46%),
+      linear-gradient(150deg,#12151b 0%,#0a0c10 55%,#0d1014 100%);
+    border:1px solid #2b323d;
+    box-shadow:
+      0 30px 90px rgba(0,0,0,.65),
+      0 0 0 1px rgba(255,255,255,.03) inset,
+      0 0 60px rgba(201,255,61,.05) inset;
+    -webkit-app-region:drag;
+  }
+  /* línea de acento que recorre el borde superior del rombo */
+  .diamond::before{
+    content:"";
+    position:absolute;inset:0;
+    border-radius:30px;
+    padding:1px;
+    background:linear-gradient(135deg,rgba(201,255,61,.55),transparent 34%,transparent 62%,rgba(154,136,255,.5));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+    mask-composite:exclude;
+    pointer-events:none;
+  }
+  .content{
+    position:absolute;inset:0;
+    transform:rotate(-45deg) scale(1.42);
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    text-align:center;
+    gap:0;
+  }
+  .logo{width:64px;height:64px;margin-bottom:10px}
+  .name{
+    font-size:27px;font-weight:680;letter-spacing:-.03em;color:#f4f2ec;
+    line-height:1;
+  }
+  .name b{color:var(--acid);font-weight:680}
+  .byline{
+    margin-top:7px;
+    font-size:9px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;
+    color:#6d7480;
+  }
+  .loader{
+    margin-top:18px;
+    width:150px;height:2px;border-radius:99px;
+    background:#232833;overflow:hidden;position:relative;
+  }
+  .loader i{
+    position:absolute;inset:0;
+    width:44%;
+    border-radius:99px;
+    background:linear-gradient(90deg,transparent,var(--acid),transparent);
+    animation:slide 1.35s ease-in-out infinite;
+  }
+  @keyframes slide{
+    0%{transform:translateX(-110%)}
+    100%{transform:translateX(360%)}
+  }
+  .status{
+    margin-top:10px;
+    font-size:10px;color:#828b97;letter-spacing:.02em;
+    min-height:13px;
+  }
+  .version{
+    margin-top:3px;
+    font-size:9px;color:#4d545f;letter-spacing:.08em;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="diamond">
+      <div class="content">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="sp-acid" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#e2ff7a"/><stop offset="1" stop-color="#a8e414"/>
+            </linearGradient>
+            <linearGradient id="sp-purple" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#b3a4ff"/><stop offset="1" stop-color="#7a63f2"/>
+            </linearGradient>
+            <filter id="sp-glow-a" x="-60%" y="-60%" width="220%" height="220%">
+              <feDropShadow dx="0" dy="0" stdDeviation="2.6" flood-color="#c9ff3d" flood-opacity="0.45"/>
+            </filter>
+            <filter id="sp-glow-p" x="-60%" y="-60%" width="220%" height="220%">
+              <feDropShadow dx="0" dy="0" stdDeviation="2.6" flood-color="#9a88ff" flood-opacity="0.5"/>
+            </filter>
+          </defs>
+          <g filter="url(#sp-glow-p)">
+            <rect x="30" y="20" width="13" height="30" rx="4.5" transform="skewX(-18)" transform-origin="36 35" stroke="url(#sp-purple)" stroke-width="4.5"/>
+          </g>
+          <g filter="url(#sp-glow-a)">
+            <rect x="19" y="13" width="13" height="30" rx="4.5" transform="skewX(-18)" transform-origin="25 28" stroke="url(#sp-acid)" stroke-width="4.5"/>
+          </g>
+        </svg>
+        <div class="name">Clip<b>Dock</b></div>
+        <div class="byline">Por Depson</div>
+        <div class="loader"><i></i></div>
+        <div class="status" id="status">Iniciando motor…</div>
+        <div class="version" id="version"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function(){
+      var v = new URLSearchParams(location.search).get('v');
+      if (v) document.getElementById('version').textContent = 'v' + v;
+      var frases = ['Iniciando motor…','Cargando componentes…','Preparando interfaz…','Casi listo…'];
+      var i = 0;
+      var el = document.getElementById('status');
+      setInterval(function(){
+        i = (i + 1) % frases.length;
+        el.textContent = frases[i];
+      }, 2200);
+    })();
+  </script>
+</body>
+</html>

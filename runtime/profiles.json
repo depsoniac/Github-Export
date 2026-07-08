@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "profiles": {
+    "light": {
+      "label": "Ligero",
+      "description": "Prepara lo mínimo para descargas, recortes y conversiones básicas.",
+      "components": [
+        "ffmpeg"
+      ],
+      "models": []
+    },
+    "recommended": {
+      "label": "Recomendado",
+      "description": "Prepara los componentes comunes para video, audio, imágenes y documentos.",
+      "components": [
+        "ffmpeg",
+        "deno",
+        "poppler",
+        "inkscape"
+      ],
+      "models": []
+    },
+    "full-ai": {
+      "label": "Completo con IA",
+      "description": "Prepara todo lo recomendado más modelos y motores de IA local.",
+      "components": [
+        "ffmpeg",
+        "deno",
+        "poppler",
+        "inkscape",
+        "ghostscript"
+      ],
+      "models": [
+        "u2netp",
+        "isnet",
+        "u2net",
+        "realesrgan",
+        "waifu2x",
+        "realsr",
+        "srmd"
+      ]
+    }
+  }
+}

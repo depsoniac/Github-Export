@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Preparando ClipDock</title>
+<style>
+  :root{--acid:#c9ff3d;--purple:#9a88ff;--text:#f4f2ec;--muted:#828b97}
+  html,body{
+    margin:0;height:100%;overflow:hidden;background:transparent;
+    font-family:Inter,"Segoe UI",Arial,sans-serif;
+    -webkit-user-select:none;user-select:none;-webkit-font-smoothing:antialiased;
+    color:var(--text);
+  }
+  .window{
+    position:relative;width:100vw;height:100vh;border-radius:22px;overflow:hidden;
+    background:linear-gradient(160deg,#101319 0%,#090b0f 60%,#0b0d12 100%);
+    border:1px solid #262c37;
+    box-shadow:0 40px 120px rgba(0,0,0,.7);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .blob{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}
+  .blob.a{width:320px;height:320px;background:radial-gradient(circle,rgba(154,136,255,.3),transparent 65%);left:-80px;top:-100px;animation:fa 11s ease-in-out infinite alternate}
+  .blob.b{width:300px;height:300px;background:radial-gradient(circle,rgba(201,255,61,.18),transparent 65%);right:-60px;bottom:-110px;animation:fb 13s ease-in-out infinite alternate}
+  @keyframes fa{to{transform:translate(60px,40px) scale(1.15)}}
+  @keyframes fb{to{transform:translate(-50px,-35px) scale(.95)}}
+  .drag{position:absolute;inset:0 60px auto 0;height:52px;-webkit-app-region:drag}
+  .close{
+    position:absolute;top:14px;right:14px;z-index:5;width:32px;height:32px;
+    border:1px solid #2b323d;border-radius:10px;background:#12161cbb;color:#8d96a1;
+    font-size:16px;display:grid;place-items:center;cursor:pointer;-webkit-app-region:no-drag;
+  }
+  .close:hover{color:#fff;border-color:#454f5d}
+  .diamond-wrap{position:relative;width:190px;height:190px;display:grid;place-items:center}
+  .ring{
+    position:absolute;inset:-12px;border-radius:30px;transform:rotate(45deg);padding:2px;
+    background:conic-gradient(from 0deg,transparent 12%,rgba(201,255,61,.5) 26%,transparent 40%,transparent 58%,rgba(154,136,255,.45) 74%,transparent 88%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    animation:spin 6s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(405deg)}}
+  .diamond{
+    width:160px;height:160px;transform:rotate(45deg);border-radius:22px;overflow:hidden;
+    background:radial-gradient(circle at 20% 16%,rgba(201,255,61,.14),transparent 44%),
+               radial-gradient(circle at 84% 86%,rgba(154,136,255,.18),transparent 48%),
+               linear-gradient(150deg,#141821 0%,#0a0c10 60%);
+    border:1px solid #2c333f;position:relative;
+    box-shadow:0 22px 60px rgba(0,0,0,.6);
+  }
+  .diamond .inner{position:absolute;inset:0;transform:rotate(-45deg) scale(1.42);display:grid;place-items:center}
+  .logo{width:60px;height:60px}
+  h1{margin:26px 0 0;font-size:21px;font-weight:660;letter-spacing:-.02em}
+  h1 b{color:var(--acid);font-weight:660}
+  .sub{margin-top:8px;font-size:11.5px;color:var(--muted);text-align:center;max-width:420px;line-height:1.55;padding:0 20px}
+  .zone{margin-top:24px;width:360px;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .bar{width:100%;height:5px;border-radius:99px;background:#1d222b;overflow:hidden;position:relative;box-shadow:0 0 0 1px #ffffff08 inset}
+  .bar i{
+    position:absolute;inset:0 auto 0 0;width:0%;border-radius:99px;
+    background:linear-gradient(90deg,var(--acid),#e2ff7a);
+    box-shadow:0 0 16px rgba(201,255,61,.5);transition:width .25s ease;
+  }
+  .bar i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:shine 1.4s ease-in-out infinite}
+  @keyframes shine{from{transform:translateX(-100%)}to{transform:translateX(200%)}}
+  .row{width:100%;display:flex;justify-content:space-between;align-items:baseline}
+  .status{font-size:11px;color:#9aa4b0}
+  .percent{font-size:12.5px;font-weight:800;color:var(--acid)}
+  .retry{
+    display:none;margin-top:4px;-webkit-app-region:no-drag;
+    min-width:190px;height:42px;border:0;border-radius:11px;cursor:pointer;
+    font:inherit;font-size:12px;font-weight:800;letter-spacing:.12em;color:#11140a;
+    background:linear-gradient(160deg,#e2ff7a,var(--acid) 55%,#a8e414);
+    box-shadow:0 10px 28px rgba(201,255,61,.2);
+  }
+  .retry:hover{filter:brightness(1.05)}
+  .error{display:none;max-width:420px;text-align:center;font-size:11px;color:#ff8d8d;line-height:1.5;padding:0 16px}
+  .footer{position:absolute;bottom:14px;left:0;right:0;display:flex;justify-content:center;font-size:9px;letter-spacing:.16em;color:#565e6a;text-transform:uppercase;font-weight:800}
+</style>
+</head>
+<body>
+  <div class="window">
+    <div class="blob a"></div><div class="blob b"></div>
+    <div class="drag"></div>
+    <button class="close" id="close" aria-label="Cerrar">×</button>
+
+    <div class="diamond-wrap">
+      <div class="ring"></div>
+      <div class="diamond"><div class="inner">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="rt-a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e2ff7a"/><stop offset="1" stop-color="#a8e414"/></linearGradient>
+            <linearGradient id="rt-p" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b3a4ff"/><stop offset="1" stop-color="#7a63f2"/></linearGradient>
+            <filter id="rt-ga" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="0" stdDeviation="2.6" flood-color="#c9ff3d" flood-opacity="0.45"/></filter>
+            <filter id="rt-gp" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="0" stdDeviation="2.6" flood-color="#9a88ff" flood-opacity="0.5"/></filter>
+          </defs>
+          <g filter="url(#rt-gp)"><rect x="30" y="20" width="13" height="30" rx="4.5" transform="skewX(-18)" transform-origin="36 35" stroke="url(#rt-p)" stroke-width="4.5"/></g>
+          <g filter="url(#rt-ga)"><rect x="19" y="13" width="13" height="30" rx="4.5" transform="skewX(-18)" transform-origin="25 28" stroke="url(#rt-a)" stroke-width="4.5"/></g>
+        </svg>
+      </div></div>
+    </div>
+
+    <h1>Preparando <b>ClipDock</b></h1>
+    <p class="sub">Primera apertura: ClipDock descarga y descomprime Python mini una sola vez.<br>Puede tardar unos minutos porque Python trae muchas carpetas internas.</p>
+
+    <div class="zone">
+      <div class="bar"><i id="fill"></i></div>
+      <div class="row">
+        <span class="status" id="status">Conectando…</span>
+        <span class="percent" id="percent">0%</span>
+      </div>
+      <button class="retry" id="retry">REINTENTAR</button>
+      <div class="error" id="error"></div>
+    </div>
+
+    <div class="footer">Por Depson</div>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const fill = $('fill'), statusEl = $('status'), percentEl = $('percent');
+    const retryBtn = $('retry'), errorEl = $('error');
+
+    window.runtimeAPI.onProgress((p) => {
+      if (typeof p.percent === 'number'){
+        fill.style.width = p.percent + '%';
+        percentEl.textContent = p.percent + '%';
+      }
+      if (p.phase === 'download'){
+        statusEl.textContent = p.totalMB
+          ? 'Descargando motor… ' + (p.receivedMB || 0) + ' de ' + p.totalMB + ' MB'
+          : 'Descargando motor…';
+      } else if (p.phase === 'extract'){
+        statusEl.textContent = p.totalMB
+          ? 'Descomprimiendo Python mini… ' + (p.extractedMB || 0) + ' de ' + p.totalMB + ' MB. Puede tardar unos minutos.'
+          : 'Descomprimiendo Python mini… puede tardar unos minutos.';
+      } else if (p.phase === 'install'){
+        statusEl.textContent = 'Instalando Python mini…';
+      } else if (p.phase === 'done'){
+        statusEl.textContent = 'Motor listo. Iniciando ClipDock…';
+      }
+    });
+
+    async function start(){
+      retryBtn.style.display = 'none';
+      errorEl.style.display = 'none';
+      statusEl.textContent = 'Conectando…';
+      const result = await window.runtimeAPI.download();
+      if (result && result.ok){
+        fill.style.width = '100%';
+        percentEl.textContent = '100%';
+        statusEl.textContent = 'Motor listo. Iniciando ClipDock…';
+        setTimeout(() => window.runtimeAPI.continueBoot(), 700);
+      } else {
+        errorEl.textContent = (result && result.error) || 'La descarga falló.';
+        errorEl.style.display = 'block';
+        retryBtn.style.display = 'block';
+        statusEl.textContent = 'No se pudo preparar Python mini';
+      }
+    }
+
+    retryBtn.addEventListener('click', start);
+    $('close').addEventListener('click', () => window.runtimeAPI.close());
+    start();
+  </script>
+</body>
+</html>
