@@ -211,10 +211,32 @@ function writeReleaseSummary(version, target, extraLines = []) {
   fs.writeFileSync(output, lines.join('\n'), 'utf8');
   log(`Resumen de exportacion: ${path.relative(root, output)}`);
 }
-function downloadToFile(url, destination) {
+function verifyDownloadedFile(filePath, label = 'archivo descargado', minBytes = 1024) {
+  if (!fs.existsSync(filePath)) fail(`${label}: la descarga termino pero el archivo no existe (${filePath}).`);
+  const size = fs.statSync(filePath).size;
+  if (size < minBytes) {
+    fs.rmSync(filePath, { force: true });
+    fail(`${label}: descarga incompleta o vacia (${formatBytes(size)}). Vuelve a correr el export.`);
+  }
+}
+function downloadToFile(url, destination, options = {}) {
   fs.mkdirSync(path.dirname(destination), { recursive: true });
   const tempDestination = `${destination}.part`;
   fs.rmSync(tempDestination, { force: true });
+  fs.rmSync(destination, { force: true });
+  const minBytes = Number(options.minBytes || 1024);
+  const label = options.label || path.basename(destination);
+
+  // En macOS/GitHub Actions, curl maneja mejor redirecciones grandes de GitHub
+  // que https.get y evita que el paso siga con un .tar.gz inexistente.
+  if (process.platform !== 'win32' && commandExists('curl')) {
+    run('curl', ['-fL', '--retry', '4', '--retry-delay', '3', '--connect-timeout', '30', '-o', tempDestination, url]);
+    verifyDownloadedFile(tempDestination, label, minBytes);
+    fs.renameSync(tempDestination, destination);
+    verifyDownloadedFile(destination, label, minBytes);
+    return Promise.resolve();
+  }
+
   return new Promise((resolve, reject) => {
     const failDownload = error => {
       fs.rmSync(tempDestination, { force: true });
@@ -236,8 +258,12 @@ function downloadToFile(url, destination) {
         response.pipe(file);
         file.on('finish', () => {
           file.close(() => {
-            fs.renameSync(tempDestination, destination);
-            resolve();
+            try {
+              verifyDownloadedFile(tempDestination, label, minBytes);
+              fs.renameSync(tempDestination, destination);
+              verifyDownloadedFile(destination, label, minBytes);
+              resolve();
+            } catch (error) { failDownload(error); }
           });
         });
         file.on('error', failDownload);
@@ -301,11 +327,11 @@ async function prepareWindowsPythonRuntime() {
     log(`[CACHE] Python mini Windows ${PY_VERSION} ya esta listo.`); return;
   }
   log(`Preparando Python mini Windows (${PY_VERSION})...`);
-  if (!fs.existsSync(zipPath)) { log(`Descargando ${zipName}...`); await downloadToFile(pythonUrl, zipPath); }
+  if (!fs.existsSync(zipPath)) { log(`Descargando ${zipName}...`); await downloadToFile(pythonUrl, zipPath, { label: 'Python embeddable Windows', minBytes: 5 * 1024 * 1024 }); }
   else log(`Usando cache: ${zipName}`);
   expandZip(zipPath, runtimeDir);
   enablePortablePythonSite(runtimeDir, PY_VERSION);
-  if (!fs.existsSync(getPipPath)) { log('Descargando instalador de pip...'); await downloadToFile('https://bootstrap.pypa.io/get-pip.py', getPipPath); }
+  if (!fs.existsSync(getPipPath)) { log('Descargando instalador de pip...'); await downloadToFile('https://bootstrap.pypa.io/get-pip.py', getPipPath, { label: 'get-pip.py', minBytes: 100 * 1024 }); }
   const pipEnv = { env: { PIP_CACHE_DIR: path.join(root, '.build', 'cache', 'pip') } };
   run(pythonExe, [getPipPath, '--no-warn-script-location'], pipEnv);
   run(pythonExe, ['-m', 'pip', 'install', '--upgrade', 'pip', 'wheel', 'setuptools'], pipEnv);
@@ -352,9 +378,17 @@ async function prepareMacRuntimeArch(arch) {
   const tarPath = path.join(cacheDir, `python-${PY_VERSION}-macos-${arch}.tar.gz`);
   const workDir = path.join(root, '.build', `python-runtime-macos-${arch}`);
   fs.mkdirSync(cacheDir, { recursive: true });
-  if (!fs.existsSync(tarPath)) { log(`Descargando Python standalone ${info.label}...`); await downloadToFile(info.url, tarPath); }
-  else log(`Usando cache: ${path.basename(tarPath)}`);
+  if (fs.existsSync(tarPath)) {
+    try { verifyDownloadedFile(tarPath, `Cache Python standalone ${info.label}`, 10 * 1024 * 1024); }
+    catch (_) { log(`[CACHE] Runtime ${info.label} corrupto/incompleto. Se descargara de nuevo.`); fs.rmSync(tarPath, { force: true }); }
+  }
+  if (!fs.existsSync(tarPath)) {
+    log(`Descargando Python standalone ${info.label}...`);
+    await downloadToFile(info.url, tarPath, { label: `Python standalone ${info.label}`, minBytes: 10 * 1024 * 1024 });
+  } else log(`Usando cache: ${path.basename(tarPath)}`);
+  verifyDownloadedFile(tarPath, `Python standalone ${info.label}`, 10 * 1024 * 1024);
   fs.rmSync(workDir, { recursive: true, force: true }); fs.mkdirSync(workDir, { recursive: true });
+  run('tar', ['-tzf', tarPath], { capture: true });
   run('tar', ['-xzf', tarPath, '-C', workDir]);
   const runtimeDir = path.join(workDir, 'python');
   const pythonBin = path.join(runtimeDir, 'bin', 'python3');
